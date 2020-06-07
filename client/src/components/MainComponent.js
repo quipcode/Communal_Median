@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { withRouter  } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter  } from 'react-router-dom';
 import {connect} from 'react-redux';
-import Navbar from './navigation/Navbar'
+// import Navbar from './navigation/Navbar'
+import Navigation from './layout/Navigation'
 
 class Main extends Component{
     constructor(props){
@@ -14,7 +15,10 @@ class Main extends Component{
         return(
             
             <div>
-                <Navbar auth={`{auth: true}`}/>
+                <Navigation auth={true}/>
+                <Switch>
+                    <Route></Route>
+                </Switch>
                 <p>Hello there</p>
             </div>
 
