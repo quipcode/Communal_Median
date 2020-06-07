@@ -3,7 +3,7 @@ const firebase = require('firebase')
 const {admin, db} = require("../utils/admin")
 const config = require('../utils/fbConfig')
 
-const {validateSignUpData} = require('../utils/validators')
+const {validateSignUpData, validateLoginData} = require('../utils/validators')
 
 firebase.initializeApp(config)
 
@@ -25,7 +25,8 @@ exports.getUsers = (req, res) => {
         })
 }
 
-exports.signUp = (req, res) => {
+//User Sign Up
+exports.signUpUser = (req, res) => {
 const newUser = {
     email: req.body.email,
     password: req.body.password,
@@ -74,5 +75,29 @@ if(!valid) return res.status(400).json(errors)
                 .status(500)
                 .json({ general: 'Something went wrong, please try again' });
             }
+        })
+}
+
+//Log user in
+exports.loginUser = (req, res) => {
+    const user = {
+        email: req.body.email,
+        password: req.body.password
+    }
+    const {errors, valid} = validateLoginData(user)
+    if(!valid) return res.status(400).json(errors)
+
+    firebase
+        .auth()
+        .signInWithEmailAndPassword(user.email, user.password)
+        .then((data) => {
+            return data.user.getIdToken()
+        })
+        .then((token) =>{ 
+            return res.json({token})
+        })
+        .catch((err) => {
+            console.error(err)
+            res.status(403).json({general: "Please provide the correct credentials"})
         })
 }

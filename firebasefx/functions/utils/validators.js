@@ -23,3 +23,16 @@ exports.validateSignUpData = (data) => {
         valid: Object.keys(errors).length === 0 ? true : false
     }
 }
+
+exports.validateLoginData = (data) => {
+    let errors = {}
+    if(isEmpty(data.email)) errors.email = "Please provide an email"
+    if(!isEmail(data.email)) errors.email = "Please provide a valid email"
+    if(isEmpty(data.password)) errors.password = "Please provide a password"
+
+    return {
+        errors, 
+        valid: Object.keys(errors).length === 0 ? true : false
+    }
+
+}
