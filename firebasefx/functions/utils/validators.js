@@ -29,10 +29,14 @@ exports.validateLoginData = (data) => {
     if(isEmpty(data.email)) errors.email = "Please provide an email"
     if(!isEmail(data.email)) errors.email = "Please provide a valid email"
     if(isEmpty(data.password)) errors.password = "Please provide a password"
-
     return {
         errors, 
         valid: Object.keys(errors).length === 0 ? true : false
     }
+}
 
+exports.reduceUserDetails = (data) => {
+    let userDetails = {}
+    if(!isEmpty(data.blurb.trim())) userDetails.blurb = data.blurb
+    return userDetails
 }

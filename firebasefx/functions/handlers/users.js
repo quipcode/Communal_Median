@@ -3,7 +3,7 @@ const firebase = require('firebase')
 const {admin, db} = require("../utils/admin")
 const config = require('../utils/fbConfig')
 
-const {validateSignUpData, validateLoginData} = require('../utils/validators')
+const {validateSignUpData, validateLoginData, reduceUserDetails} = require('../utils/validators')
 
 firebase.initializeApp(config)
 
@@ -99,5 +99,20 @@ exports.loginUser = (req, res) => {
         .catch((err) => {
             console.error(err)
             res.status(403).json({general: "Please provide the correct credentials"})
+        })
+}
+
+// Update your own user profile
+exports.updateMyUserDetails = (req, res) => {
+    
+    let userDets = reduceUserDetails(req.body)
+    db.doc(`users/${req.user.email}`)
+        .update(userDets)
+        .then(() => {
+            return res.json({message: "Your profile has been updated"})
+        })
+        .catch((err) => {
+            console.error(err)
+            return res.status(500).json({error: err.code})
         })
 }
